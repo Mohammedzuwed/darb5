@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المناهج - منصة درب</title>
+    
+    <!-- Bootstrap 5 RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #2795f3; 
+            --dark-blue: #1620c2; 
+            --yellow-accent: #f5a800; 
+            --text-dark: #0f172a;
+            --light-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f4f8; 
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* ------------------------------------------ */
+        /* الشريط العلوي */
+        /* ------------------------------------------ */
+        .navbar {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1030; 
+            background-color: rgba(255, 255, 255, 0.98); 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar-brand { display: flex; align-items: center; gap: 10px; }
+        .brand-icon { color: var(--text-dark); font-size: 28px; }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+        .brand-title { color: var(--text-dark); font-size: 15px; font-weight: 800; }
+        .brand-subtitle { color: var(--yellow-accent); font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+
+        .nav-link { color: var(--text-dark) !important; font-weight: 800; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-blue) !important; }
+
+        /* ------------------------------------------ */
+        /* ترويسة الصفحة */
+        /* ------------------------------------------ */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            padding: 60px 0 40px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(22, 32, 194, 0.1);
+        }
+
+        .page-title { font-weight: 900; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-subtitle { color: rgba(255,255,255,0.8); font-size: 1.1rem; }
+
+        /* ------------------------------------------ */
+        /* منطقة الاختيارات */
+        /* ------------------------------------------ */
+        .selection-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+            z-index: 1000; /* رفع مستوى البطاقة بالكامل لضمان ظهور القوائم فوق المحتوى */
+        }
+
+        .step-title {
+            color: var(--dark-blue);
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background-color: var(--yellow-accent);
+            color: white;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.9rem;
+        }
+
+        /* --- تصميم القوائم المنسدلة المخصصة --- */
+        .custom-dropdown-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+            z-index: 10;
+        }
+
+        /* رفع الأولوية عند فتح القائمة */
+        .custom-dropdown-container.active-dropdown {
+            z-index: 9999 !important;
+        }
+
+        .dropdown-trigger {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .dropdown-trigger:hover, .dropdown-trigger.active {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(39, 149, 243, 0.1);
+        }
+
+        .dropdown-menu-custom {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid var(--primary-blue);
+            border-radius: 12px;
+            margin-top: 8px;
+            z-index: 9999;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-search-wrapper {
+            padding: 10px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dropdown-search {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .dropdown-search:focus { border-color: var(--primary-blue); }
+
+        .dropdown-options-list { max-height: 200px; overflow-y: auto; }
+
+        .dropdown-option {
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dropdown-option:last-child { border-bottom: none; }
+        .dropdown-option:hover, .dropdown-option.selected {
+            background-color: var(--primary-blue) !important;
+            color: var(--yellow-accent) !important;
+        }
+
+        .dropdown-options-list::-webkit-scrollbar { width: 6px; }
+        .dropdown-options-list::-webkit-scrollbar-track { background: #f1f1f1; }
+        .dropdown-options-list::-webkit-scrollbar-thumb { background: var(--primary-blue); border-radius: 10px; }
+
+        /* ------------------------------------------ */
+        /* تصميم المحتوى المعروض (فيديوهات / ملفات) */
+        /* ------------------------------------------ */
+        .card-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .video-card { 
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+            position: relative;
+        }
+        .video-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 30px rgba(39, 149, 243, 0.15);
+        }
+        .video-thumbnail-container { position: relative; }
+        .video-card img {
+            border-bottom: 3px solid var(--yellow-accent);
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        .play-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+            opacity: 0.8;
+            transition: 0.3s;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .video-card:hover .play-overlay { opacity: 1; color: var(--yellow-accent); transform: translate(-50%, -50%) scale(1.1); }
+        .video-card .card-body { padding: 15px; text-align: center; }
+        .video-card .card-title { font-weight: 800; color: var(--text-dark); margin: 0; font-size: 1.1rem; }
+
+        /* أيقونة تيليجرام على الكارت */
+        .telegram-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #229ED9;
+            color: white !important;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            z-index: 5;
+        }
+        .telegram-badge:hover { transform: scale(1.2); background: #1a84b8; }
+
+        /* أيقونة قائمة التشغيل */
+        .playlist-badge {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 5;
+        }
+
+        /* تصميم قائمة الملفات */
+        .custom-file-list { padding: 0; margin: 0; list-style: none; }
+        .file-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+        }
+        .file-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-color: var(--primary-blue);
+        }
+        .file-icon {
+            color: #ef4444; 
+            font-size: 1.5rem;
+            background: #fef2f2;
+            width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ================= الشريط العلوي ================= -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fa-solid fa-graduation-cap brand-icon"></i> 
+                <div class="brand-text ms-2">
+                    <span class="brand-title">كلية تقنية المعلومات</span>
+                    <span class="brand-subtitle">ELMERGIB UNIVERSITY</span>
+                </div>
+            </a>
+            <div class="d-flex align-items-center">
+                <button class="navbar-toggler border-0 shadow-none d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <i class="fa-solid fa-bars text-dark fs-2"></i>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto gap-lg-4 mb-3 mb-lg-0 text-center">
+                    <li class="nav-item"><a class="nav-link" href="/">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/curriculum">الأقسام والمناهج</a></li>
+                </ul>
+                <div class="d-flex justify-content-center">
+                    <a href="/" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                        <i class="fa-solid fa-arrow-right ms-2"></i> العودة للرئيسية
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= ترويسة الصفحة ================= -->
+    <div class="page-header" data-aos="fade-down">
+        <div class="container">
+            <h1 class="page-title">المناهج الدراسية</h1>
+            <p class="page-subtitle">اختر القسم والمادة للوصول إلى الشروحات والملفات المتاحة</p>
+        </div>
+    </div>
+
+    <!-- ================= محتوى المنصة (الاختيارات) ================= -->
+    <div class="container pb-5">
+        
+        <div class="selection-card" data-aos="fade-up">
+            <div id="selectors" class="row g-3"></div>
+        </div>
+
+        <!-- منطقة عرض النتائج (فيديو / ملفات) -->
+        <div id="contentArea" class="mt-4" data-aos="fade-up" data-aos-delay="200">
+            <!-- سيتم توليد المحتوى هنا بواسطة الـ JS -->
+        </div>
+
+    </div>
+
+    <!-- ================= نافذة معاينة PDF ================= -->
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 90%;">
+            <div class="modal-content" style="height: 85vh;">
+                <div class="modal-header bg-light border-0 py-2">
+                    <h5 class="modal-title fs-6 fw-bold text-truncate" id="pdfPreviewTitle">معاينة الملف</h5>
+                    <div class="ms-auto d-flex gap-2">
+                        <a href="#" id="pdfDownloadBtn" class="btn btn-sm btn-primary rounded-pill px-3" download>
+                            <i class="fa-solid fa-download me-1"></i> تنزيل
+                        </a>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-0 bg-dark position-relative">
+                    <iframe id="pdfPreviewFrame" src="" width="100%" height="100%" style="border: none; background: white;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= نافذة معاينة الفيديو ================= -->
+    <div class="modal fade" id="videoPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 900px;">
+            <div class="modal-content border-0 shadow-lg overflow-hidden" style="border-radius: 20px; background: #000;">
+                <div class="modal-header border-0 py-3" style="background: linear-gradient(135deg, var(--dark-blue) 0%, var(--text-dark) 100%);">
+                    <h5 class="modal-title fs-5 fw-bold text-white text-truncate" id="videoPreviewTitle">
+                        <i class="fa-solid fa-circle-play text-warning me-2"></i> عنوان الفيديو
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0" style="aspect-ratio: 16/9; background: #000;">
+                    <iframe id="videoPreviewFrame" src="" width="100%" height="100%" style="border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        AOS.init({duration: 800, once: true, offset: 50});
+
+        const structure = {{ structure | tojson | safe }};
+        
+        const oopVideos = [
+            {title: 'مقدمة في البرمجة الشيئية OOP', id: 'aJG-KnmfFxM'},
+            {title: 'التعامل مع Classes و Objects', id: '8eiVaCv26uk'},
+            {title: 'مفهوم الوراثة Inheritance', id: '7nTF391uP74'},
+            {title: 'تعدد الأشكال Polymorphism', id: 'SDkRaqmr-Cg'}
+        ];
+
+        const visualVideos = [
+            {title: 'مقدمة في البرمجة المرئية #C', id: 'KZuU_EQkfUo'},
+            {title: 'التعامل مع بيئة Visual Studio', id: '-f1G5DwXxcQ'},
+            {title: 'شرح أدوات التحكم TextBox و Label', id: 'In3gnv-7vy0'},
+            {title: 'التعامل مع Button و Events', id: 'w267SMb5Cio'},
+            {title: 'شرح CheckBox و RadioButton', id: 'pfTANblumX4'},
+            {title: 'القوائم المنسدلة ComboBox', id: 'sCV55crjZ6M'},
+            {title: 'أداة عرض البيانات DataGridView', id: 'OxJcAu3nbXo'},
+            {title: 'الربط مع قاعدة بيانات SQL Server', id: 'xB-3-qoTc_c'},
+            {title: 'عملية الإضافة Insert', id: 'Go7P5Dexkhs'},
+            {title: 'عملية الحذف Delete', id: 'NS4tYrp5XQ4'},
+            {title: 'عملية التعديل Update', id: 'NCtxdqHb8EE'},
+            {title: 'البحث داخل قاعدة البيانات Search', id: '2akUOdi3WrI'},
+            {title: 'دورة كاملة في برمجة المنظومات', id: '4p-XZXfiedc'},
+            {title: 'تقارير Crystal Reports', id: 'pdsc9SVW-S8'},
+            {title: 'تصميم واجهة المستخدم UI/UX', id: 'pQjAE95w4YY'},
+            {title: 'التعامل مع الصور في #C', id: 'vReEhvyaiyM'},
+            {title: 'شرح الـ Arrays والمصفوفات', id: 'VELc-KWBulo'},
+            {title: 'التعامل مع الملفات Files', id: 'VA5IXH-WOVM'},
+            {title: 'شرح الـ Functions والدوال', id: 'nd3vOxMAiiI'},
+            {title: 'أساسيات الـ LINQ', id: 'XBaoxqU3qq0'},
+            {title: 'نظام إدارة المبيعات - جزء 1', id: 'eLThM3GHQcY'},
+            {title: 'نظام إدارة المبيعات - جزء 2', id: 'DT7-kSk4md0'},
+            {title: 'نظام إدارة المبيعات - جزء 3', id: 'Y2aBc0uRTPA'},
+            {title: 'تجهيز البرنامج للتنبيت Setup', id: 'Bd9f5iP9Cs0'},
+            {title: 'التعامل مع الـ Timer', id: 'U-SYJQDlmqE'},
+            {title: 'شرح الـ Try Catch للتعامل مع الأخطاء', id: 'xrc_4wAAEOU'},
+            {title: 'تصميم شاشة تسجيل الدخول Login', id: 'BQ7jFrysbQU'},
+            {title: 'الخاتمة ونصائح برمجية', id: '62Zb2AOl9CY'}
+        ];
+
+        const algorithmVideos = [
+            {title: 'مقدمة في تحليل الخوارزميات', id: 'wXm2V6TKRwU'},
+            {title: 'شرح مفهوم الـ Big O Notation', id: 'aLBFJG-CsW0'},
+            {title: 'خوارزميات الترتيب Sorting - جزء 1', id: 'iLNXdmuza3A'},
+            {title: 'خوارزميات البحث Search Algorithms', id: 'qJsmUw3-QRA'},
+            {title: 'تحليل أداء الخوارزميات المعقدة', id: 'NK-Z7syJzP4'}
+        ];
+
+        const math1Videos = [
+            {title: 'شرح مادة رياضة 1 - م. عمران', id: '-jFYk2gOckg', telegram: 'https://t.me/omran44556'}
+        ];
+
+        const math2Videos = [
+            {title: 'كورس رياضة 2 - م. عمران (قائمة تشغيل)', id: 'PLi0bf5LP8cnGuOu7kzhNEYicODivqLK2c', isPlaylist: true, thumb: 'GuOu7kzhNEY'},
+            {title: 'شرح رياضة 2 - م. محمد البركولي (قائمة تشغيل)', id: 'PLlr88PD1e1J2Cpse9iRXFxMO0E6FiOV3C', isPlaylist: true, thumb: 'Cpse9iRXFxM'},
+            {title: 'مراجعة رياضة 2 - قناة أخرى (قائمة تشغيل)', id: 'PL7xTuq9C6oYZNexbuSQTsQJ429rdpJQUv', isPlaylist: true, thumb: 'NexbuSQTsQJ'}
+        ];
+
+        const networkVideos = [
+            {title: 'مقدمة شبكات - ج 1', id: 'JXVhDAMFq5A'},
+            {title: 'مقدمة شبكات - ج 2', id: '61kRxdZ5p-o'}
+        ];
+
+        const prog2Videos = [
+            {title: 'شرح مادة برمجة 2 - كورس كامل', id: '-Xfx53vVvR0'}
+        ];
+
+        const prog1Videos = [
+            {title: 'كورس برمجة 1 - للمبتدئين', id: '35qTqtpQMxg'},
+            {title: 'برمجة 1 - شرح إضافي', id: 'XDuWyYxksXU'}
+        ];
+
+        const algebraVideos = [
+            {title: 'كورس الجبر الخطي - م. محمود السعدي (قائمة تشغيل)', id: 'PLp5QO1iuiUkM2C_JBn5zLSE81dDIjyCy8', isPlaylist: true, thumb: 'vFhL_eS9L28'},
+            {title: 'شرح مادة الجبر الخطي - م. محمد البركولي (قائمة تشغيل)', id: 'PLfBzgS-uDB2Mscg5Zsuu-whjURMiTMnkj', isPlaylist: true, thumb: '_n74Yn_o2_Y'},
+            {title: 'مراجعة شاملة لمادة الجبر الخطي', id: 'lBFUq6NZ-7g'}
+        ];
+
+        const internetTechVideos = [
+            {title: 'كورس تقنية انترنت - HTML & CSS', id: 'PLDoPjvoNmBAwClZ1PDcjWilxp9YERUbNt', isPlaylist: true, thumb: 'vcl6X6Lz5xM'}
+        ];
+
+        const itBasicsVideos = [
+            {title: 'أساسيات تقنية المعلومات IT', id: 'PLfOk7Ih7aac9W6xuEOmnws362_qOlcLD5', isPlaylist: true, thumb: '9D7q-V9zW8g'}
+        ];
+
+        const dataStructuresVideos = [
+            {title: 'هياكل البيانات Data Structures', id: 'PLsGJzJ8SQXTcsXRVviurGei0lf_t_I4D8', isPlaylist: true, thumb: 'S56Fv2W7KIs'},
+            {title: 'شرح هياكل البيانات - م. محمد البركولي (قائمة تشغيل)', id: 'PLwCMLs3sjOY4UQq4vXgGPwGLVX1Y5faaS', isPlaylist: true, thumb: 'UQq4vXgGPwG'},
+            {title: 'هياكل البيانات - Elzero (قائمة تشغيل)', id: 'PL7VL3VEjE3BgMtX6d0jN_c_2KaeHD85s_', isPlaylist: true, thumb: 'iAgr41bL09g'},
+            {title: 'هياكل البيانات - ج 1', id: 'Gtpnablplfk'},
+            {title: 'هياكل البيانات - ج 2', id: 'xhcChs9jijM'},
+            {title: 'هياكل البيانات - ج 3', id: 'b8RHZ78aMws'},
+            {title: 'هياكل البيانات - ج 4', id: 'Hk3cRv30GWs'},
+            {title: 'هياكل البيانات - ج 5', id: 'vS_lYbc6BUk'},
+            {title: 'هياكل البيانات - ج 6', id: 'SbDUW7_G3Xc'},
+            {title: 'هياكل البيانات - ج 7', id: 'AMrXoI1UkrQ'},
+            {title: 'هياكل البيانات - ج 8', id: 'xbbr6Cqb_BE'},
+            {title: 'هياكل البيانات - ج 9', id: 'H1otfrolOd4'},
+            {title: 'هياكل البيانات - ج 10', id: 'JNrev_FBqF4'},
+            {title: 'هياكل البيانات - ج 11', id: 'mZ5D4sM0__g'}
+        ];
+
+        const discreteMathVideos = [
+            {title: 'تراكيب منفصلة - م. محمد البركولي', id: 'PLpC0aEN_4Q40g_tUBIlBQnVyH1UJiA2j8', isPlaylist: true, thumb: 'H4-IuX0-V78'},
+            {title: 'تراكيب منفصلة - كورس آخر', id: 'PLKIiYWaXCxkY3fL8lQRUfcbif7GCPWHkW', isPlaylist: true, thumb: 'Y3fL8lQRUfc'}
+        ];
+
+        const digitalDesignVideos = [
+            {title: 'تصميم رقمي Digital Design - قائمة تشغيل 1', id: 'PL3f0hoKDk-_qAMj_hU21OVaMnt9XlQEc1', isPlaylist: true, thumb: 'qAMj_hU21OV'},
+            {title: 'تصميم رقمي Digital Design - قائمة تشغيل 2', id: 'PLCn2VC9ANZ7Lnd_Dyt-rUnOHyFBh6ZBW9', isPlaylist: true, thumb: 'Lnd_Dyt-rUn'},
+            {title: 'تصميم رقمي Digital Design - ج 1', id: 'hF7ja__Zf6U'},
+            {title: 'تصميم رقمي Digital Design - ج 2', id: 'WZJQRLQAUQg'},
+            {title: 'تصميم رقمي Digital Design - شرح إضافي', id: '2xwLuDnfgRU'}
+        ];
+
+        const numericalAnalysisVideos = [
+            {title: 'تحليل عددي - م. محمود السعدي (قائمة تشغيل)', id: 'PLwdiLJxYI4Kn4_Nnq2FqTYaK_yXGhI_cI', isPlaylist: true, thumb: 'Nnq2FqTYaK_y'},
+            {title: 'تحليل عددي - كورس آخر (قائمة تشغيل)', id: 'PLzvuOc-YOA4o5R91BmoXGHcBgozQA-NP8', isPlaylist: true, thumb: 'XGHcBgozQA-'},
+            {title: 'تحليل عددي Numerical Analysis', id: '4ok8d9dKSJs'},
+            {title: 'قناة م. محمود السعدي (للمتابعة)', id: 'UCP18EG0qmyFm1w_wCt-fvXA', isChannel: true}
+        ];
+
+        const softwareModelingVideos = [
+            {title: 'نمذجة البرمجيات - ج 1', id: 'Xl5zgcaARJk'},
+            {title: 'نمذجة البرمجيات - ج 2', id: 'NogljvraEe0'},
+            {title: 'نمذجة البرمجيات - ج 3', id: 'bH3AeXipERY'},
+            {title: 'نمذجة البرمجيات - ج 4', id: 'Vgfhma9jQW8'},
+            {title: 'نمذجة البرمجيات - ج 5', id: 'BU4oyyPA0OU'}
+        ];
+
+        const databaseVideos = [
+            {title: 'قواعد البيانات Database', id: 'QYKnX2VFkH8'}
+        ];
+
+        function createCustomDropdown(options, onSelect, placeholder = '--- اختر ---') {
+            const container = document.createElement('div');
+            container.className = 'custom-dropdown-container';
+            
+            container.innerHTML = `
+                <div class="dropdown-trigger">
+                    <span class="selected-text">${placeholder}</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-menu-custom">
+                    <div class="dropdown-search-wrapper">
+                        <input type="text" class="dropdown-search" placeholder="بحث...">
+                    </div>
+                    <div class="dropdown-options-list">
+                        ${options.map(opt => `<div class="dropdown-option" data-value="${opt}">${opt}</div>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            const trigger = container.querySelector('.dropdown-trigger');
+            const menu = container.querySelector('.dropdown-menu-custom');
+            const searchInput = container.querySelector('.dropdown-search');
+            const optionElements = container.querySelectorAll('.dropdown-option');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = trigger.classList.contains('active');
+                
+                // إغلاق جميع القوائم المفتوحة الأخرى وإعادة الـ z-index لوضعه الطبيعي
+                document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.dropdown-menu-custom').forEach(m => m.style.display = 'none');
+                document.querySelectorAll('.custom-dropdown-container').forEach(c => c.classList.remove('active-dropdown'));
+                
+                if (!isActive) {
+                    trigger.classList.add('active');
+                    container.classList.add('active-dropdown'); // رفع أولوية هذه القائمة
+                    menu.style.display = 'block';
+                    searchInput.focus();
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                optionElements.forEach(el => {
+                    const text = el.textContent.toLowerCase();
+                    el.style.display = text.includes(term) ? 'block' : 'none';
+                });
+            });
+
+            optionElements.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    const val = el.getAttribute('data-value');
+                    trigger.querySelector('.selected-text').textContent = val;
+                    optionElements.forEach(opt => opt.classList.remove('selected'));
+                    el.classList.add('selected');
+                    
+                    trigger.classList.remove('active');
+                    container.classList.remove('active-dropdown'); // إعادة الـ z-index لوضعه الطبيعي
+                    menu.style.display = 'none';
+                    onSelect(val);
+                });
+            });
+
+            document.addEventListener('click', () => {
+                trigger.classList.remove('active');
+                container.classList.remove('active-dropdown');
+                menu.style.display = 'none';
+            });
+
+            return container;
+        }
+
+        function renderVideoCards(subjectName) {
+            let targetVideos = [];
+            if (subjectName && subjectName.includes('شيئية')) { targetVideos = oopVideos; } 
+            else if (subjectName && subjectName.includes('مرئية')) { targetVideos = visualVideos; } 
+            else if (subjectName && subjectName.includes('خوارزميات')) { targetVideos = algorithmVideos; }
+            else if (subjectName && subjectName.includes('رياضة 1')) { targetVideos = math1Videos; }
+            else if (subjectName && subjectName.includes('برمجة 2')) { targetVideos = prog2Videos; }
+            else if (subjectName && subjectName.includes('برمجة 1')) { targetVideos = prog1Videos; }
+            else if (subjectName && subjectName.includes('جبر خطي')) { targetVideos = algebraVideos; }
+            else if (subjectName && subjectName.includes('تقنية انترنت')) { targetVideos = internetTechVideos; }
+            else if (subjectName && subjectName.includes('أساسيات تقنية المعلومات')) { targetVideos = itBasicsVideos; }
+            else if (subjectName && subjectName.includes('هياكل البيانات')) { targetVideos = dataStructuresVideos; }
+            else if (subjectName && subjectName.includes('تراكيب منفصلة')) { targetVideos = discreteMathVideos; }
+            else if (subjectName && subjectName.includes('تصميم رقمي')) { targetVideos = digitalDesignVideos; }
+            else if (subjectName && subjectName.includes('تحليل عددي')) { targetVideos = numericalAnalysisVideos; }
+            else if (subjectName && subjectName.includes('مقدمة شبكات')) { targetVideos = networkVideos; }
+            else if (subjectName && subjectName.includes('نمذجة البرمجيات')) { targetVideos = softwareModelingVideos; }
+            else if (subjectName && subjectName.includes('قواعد البيانات')) { targetVideos = databaseVideos; }
+            else if (subjectName && subjectName.includes('رياضة 2')) { targetVideos = math2Videos; }
+            else return;
+
+            const contentArea = document.getElementById('contentArea');
+            const grid = document.createElement('div');
+            grid.className = 'card-grid mb-4';
+            
+            targetVideos.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                const thumbId = v.thumb || v.id;
+                
+                // تحديد صورة الكارت (إذا كانت قناة، نستخدم أيقونة يوتيوب)
+                const imgSrc = v.isChannel 
+                    ? 'https://img.youtube.com/vi/placeholder/hqdefault.jpg' // سيتم استبدالها بأيقونة
+                    : `https://img.youtube.com/vi/${thumbId}/hqdefault.jpg`;
+
+                card.innerHTML = `
+                    <div class="video-thumbnail-container" style="${v.isChannel ? 'background: #f1f5f9; display: flex; align-items: center; justify-content: center; height: 160px;' : ''}">
+                        ${v.isChannel 
+                            ? `<i class="fa-brands fa-youtube" style="font-size: 5rem; color: #ef4444;"></i>` 
+                            : `<img src="${imgSrc}" alt="${v.title}">`
+                        }
+                        <i class="fa-solid fa-circle-play play-overlay"></i>
+                        ${v.telegram ? `<a href="${v.telegram}" target="_blank" class="telegram-badge" title="رابط تيليجرام"><i class="fa-brands fa-telegram"></i></a>` : ''}
+                        ${v.isPlaylist ? `<div class="playlist-badge" title="قائمة تشغيل"><i class="fa-solid fa-list-ul"></i></div>` : ''}
+                        ${v.isChannel ? `<div class="playlist-badge bg-danger" title="قناة يوتيوب"><i class="fa-solid fa-tv"></i> قناة</div>` : ''}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${v.title}</h5>
+                    </div>`;
+                card.addEventListener('click', (e) => { 
+                    if (e.target.closest('.telegram-badge')) return;
+                    if (v.isChannel) {
+                        window.open(`https://www.youtube.com/channel/${v.id}`, '_blank');
+                    } else {
+                        openVideoPreview(v.title, v.id, v.isPlaylist); 
+                    }
+                });
+                grid.appendChild(card);
+            });
+            contentArea.appendChild(grid);
+        }
+
+        function renderFilesList(files) {
+            const contentArea = document.getElementById('contentArea');
+            if (!files || files.length === 0) {
+                contentArea.innerHTML += `<div class="alert alert-info border-0 shadow-sm rounded-4 text-center fw-bold py-4">
+                    <i class="fa-solid fa-folder-open fs-1 d-block mb-2 text-primary"></i>
+                    لا توجد ملفات متاحة حالياً في هذا القسم.
+                </div>`;
+                return;
+            }
+            const list = document.createElement('ul');
+            list.className = 'custom-file-list';
+            files.forEach(f => {
+                const li = document.createElement('li');
+                li.className = 'file-item';
+                li.innerHTML = `
+                    <div class="file-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                    <div class="flex-grow-1">
+                        <span class="file-name fw-bold text-dark">${f.name}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-light btn-sm text-primary rounded-circle border preview-btn" title="معاينة الملف">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <a href="${f.url}" download class="btn btn-light btn-sm text-success rounded-circle border" title="تنزيل">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                `;
+                li.querySelector('.preview-btn').addEventListener('click', () => { openPdfPreview(f.name, f.url); });
+                list.appendChild(li);
+            });
+            contentArea.appendChild(list);
+        }
+
+        function openPdfPreview(name, url) {
+            const modalElement = document.getElementById('pdfPreviewModal');
+            const titleElement = document.getElementById('pdfPreviewTitle');
+            const iframeElement = document.getElementById('pdfPreviewFrame');
+            const downloadBtn = document.getElementById('pdfDownloadBtn');
+            titleElement.textContent = name;
+            iframeElement.src = url;
+            downloadBtn.href = url;
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            modalElement.addEventListener('hidden.bs.modal', () => { iframeElement.src = ''; }, { once: true });
+        }
+
+        function openVideoPreview(title, videoId, isPlaylist = false) {
+            const modalElement = document.getElementById('videoPreviewModal');
+            const titleElement = document.getElementById('videoPreviewTitle');
+            const iframeElement = document.getElementById('videoPreviewFrame');
+            titleElement.innerHTML = `<i class="fa-solid fa-circle-play text-warning me-2"></i> ${title}`;
+            
+            const embedUrl = isPlaylist 
+                ? `https://www.youtube.com/embed/videoseries?list=${videoId}&autoplay=1&rel=0`
+                : `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+            
+            iframeElement.src = embedUrl;
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            modalElement.addEventListener('hidden.bs.modal', () => { iframeElement.src = ''; }, { once: true });
+        }
+
+        function buildSelector(levelData, levelIndex, parentSelectionName = '') {
+            const selectorsContainer = document.getElementById('selectors');
+            let options = Object.keys(levelData).filter(k => k !== '__files__');
+            
+            if (levelIndex === 0) options = options.filter(k => k !== 'الخيرات');
+            
+            const hasSpecialVideos = parentSelectionName.includes('شيئية') || parentSelectionName.includes('مرئية') || parentSelectionName.includes('خوارزميات') || parentSelectionName.includes('رياضة 1') || parentSelectionName.includes('رياضة 2') || parentSelectionName.includes('برمجة 2') || parentSelectionName.includes('برمجة 1') || parentSelectionName.includes('جبر خطي') || parentSelectionName.includes('تقنية انترنت') || parentSelectionName.includes('أساسيات تقنية المعلومات') || parentSelectionName.includes('هياكل البيانات') || parentSelectionName.includes('تراكيب منفصلة') || parentSelectionName.includes('تصميم رقمي') || parentSelectionName.includes('تحليل عددي') || parentSelectionName.includes('مقدمة شبكات') || parentSelectionName.includes('نمذجة البرمجيات') || parentSelectionName.includes('قواعد البيانات');
+            if (levelIndex === 2 && hasSpecialVideos && !options.includes('شرح المادة')) {
+                options = ['شرح المادة', ...options];
+            }
+            
+            if (options.length === 0) {
+                if (levelData['__files__']) {
+                    renderVideoCards(parentSelectionName);
+                    renderFilesList(levelData['__files__']);
+                }
+                return;
+            }
+
+            const col = document.createElement('div');
+            col.className = 'col-md-3';
+            col.dataset.level = levelIndex;
+            
+            const titles = ['اختر القسم', 'اختر المادة', 'اختر المحتوى', 'اختر الفصل الدراسي'];
+            const stepTitle = titles[levelIndex] || 'اختر';
+            
+            col.innerHTML = `<div class="step-title"><span class="step-number">${levelIndex + 1}</span> ${stepTitle}</div>`;
+
+            const dropdown = createCustomDropdown(options, (chosen) => {
+                Array.from(selectorsContainer.children).forEach(child => {
+                    if (Number(child.dataset.level) > levelIndex) child.remove();
+                });
+
+                document.getElementById('contentArea').innerHTML = '';
+
+                if (levelIndex === 2 && hasSpecialVideos && chosen === 'شرح المادة') {
+                    renderVideoCards(parentSelectionName);
+                    return;
+                }
+                
+                const nextData = levelData[chosen];
+                if (!nextData) return;
+
+                if (nextData['__files__']) {
+                    renderVideoCards(chosen);
+                    renderFilesList(nextData['__files__']);
+                }
+
+                const hasChildren = Object.keys(nextData).some(k => k !== '__files__');
+                if (hasChildren) buildSelector(nextData, levelIndex + 1, chosen);
+            });
+
+            col.appendChild(dropdown);
+            selectorsContainer.appendChild(col);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            buildSelector(structure, 0);
+        });
+    </script>
+</body>
+</html>

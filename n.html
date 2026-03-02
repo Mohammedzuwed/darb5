@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المناهج - منصة درب</title>
+    
+    <!-- Bootstrap 5 RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #2795f3; 
+            --dark-blue: #1620c2; 
+            --yellow-accent: #f5a800; 
+            --text-dark: #0f172a;
+            --light-bg: #f8fafc;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f4f8; /* خلفية الصفحة رمادي مزرق فاتح جداً لتبدو كمنصة */
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* ------------------------------------------ */
+        /* الشريط العلوي (متطابق مع الرئيسية) */
+        /* ------------------------------------------ */
+        .navbar {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            position: sticky;
+            top: 0;
+            width: 100%;
+            z-index: 1030; 
+            background-color: rgba(255, 255, 255, 0.98); /* زجاجي أبيض دائم هنا */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar-brand { display: flex; align-items: center; gap: 10px; }
+        .brand-icon { color: var(--text-dark); font-size: 28px; }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+        .brand-title { color: var(--text-dark); font-size: 15px; font-weight: 800; }
+        .brand-subtitle { color: var(--yellow-accent); font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+
+        .nav-link { color: var(--text-dark) !important; font-weight: 800; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--primary-blue) !important; }
+
+        .btn-custom-dark {
+            background-color: var(--dark-blue); color: #fff; font-weight: 700;
+            padding: 8px 30px; border-radius: 50px; border: none; transition: 0.3s;
+        }
+        .btn-custom-dark:hover { background-color: #0d148c; color: #fff; transform: scale(1.05); }
+
+        /* ------------------------------------------ */
+        /* ترويسة الصفحة (Page Header) */
+        /* ------------------------------------------ */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            padding: 60px 0 40px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(22, 32, 194, 0.1);
+        }
+
+        .page-title { font-weight: 900; font-size: 2.5rem; margin-bottom: 10px; }
+        .page-subtitle { color: rgba(255,255,255,0.8); font-size: 1.1rem; }
+
+        /* ------------------------------------------ */
+        /* تصميم منطقة الاختيارات (Selection Area) */
+        /* ------------------------------------------ */
+        .selection-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            margin-bottom: 30px;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .step-title {
+            color: var(--dark-blue);
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-number {
+            background-color: var(--yellow-accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1rem;
+        }
+
+        /* --- تصميم القوائم المنسدلة المخصصة --- */
+        .custom-dropdown-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .dropdown-trigger {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .dropdown-trigger:hover, .dropdown-trigger.active {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(39, 149, 243, 0.1);
+        }
+
+        .dropdown-menu-custom {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid var(--primary-blue);
+            border-radius: 12px;
+            margin-top: 8px;
+            z-index: 1000;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-search-wrapper {
+            padding: 10px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dropdown-search {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .dropdown-search:focus {
+            border-color: var(--primary-blue);
+        }
+
+        .dropdown-options-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dropdown-option {
+            padding: 12px 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dropdown-option:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-option:hover, .dropdown-option.selected {
+            background-color: var(--primary-blue) !important;
+            color: var(--yellow-accent) !important;
+        }
+
+        /* تحسين السكرول بار */
+        .dropdown-options-list::-webkit-scrollbar { width: 6px; }
+        .dropdown-options-list::-webkit-scrollbar-track { background: #f1f1f1; }
+        .dropdown-options-list::-webkit-scrollbar-thumb { background: var(--primary-blue); border-radius: 10px; }
+
+        /* ------------------------------------------ */
+        /* تصميم المحتوى المعروض (فيديوهات / ملفات) */
+        /* ------------------------------------------ */
+        .card-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .video-card { 
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+        }
+        .video-card.small-card {
+            font-size: 0.85rem;
+        }
+        .video-card.small-card .video-thumbnail-container img {
+            height: 120px;
+        }
+        .video-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 30px rgba(39, 149, 243, 0.15);
+        }
+        .video-thumbnail-container {
+            position: relative;
+        }
+        .video-card img {
+            border-bottom: 3px solid var(--yellow-accent);
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        .play-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 3rem;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+        .video-card:hover .play-overlay { opacity: 1; color: var(--yellow-accent); transform: translate(-50%, -50%) scale(1.1); }
+        .video-card .card-body { padding: 15px; text-align: center; }
+        .video-card .card-title { font-weight: 800; color: var(--text-dark); margin: 0; font-size: 1.1rem; }
+
+        /* تصميم قائمة الملفات */
+        .custom-file-list { padding: 0; margin: 0; list-style: none; }
+        .file-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .file-item:hover {
+            transform: translateX(-5px); /* يتحرك لليسار قليلا (RTL) */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-color: var(--primary-blue);
+        }
+        .file-icon {
+            color: #ef4444; /* لون أحمر لأيقونة الـ PDF */
+            font-size: 1.5rem;
+            background: #fef2f2;
+            width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px;
+        }
+        .file-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-grow: 1;
+        }
+        .file-link::after { content: ''; position: absolute; inset: 0; } /* Stretched link */
+
+        /* ------------------------------------------ */
+        /* القائمة الجانبية (اتصل بنا) - متطابقة مع الرئيسية */
+        /* ------------------------------------------ */
+        .custom-offcanvas {
+            border-left: none;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+            font-family: 'Cairo', sans-serif;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: var(--text-dark);
+            text-decoration: none;
+            margin-bottom: 15px;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .contact-item:hover {
+            background: #ffffff;
+            border-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(39, 149, 243, 0.15);
+            color: var(--primary-blue);
+        }
+        .contact-icon {
+            width: 45px; height: 45px;
+            background: #e2e8f0; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; margin-left: 15px; color: var(--primary-blue);
+            transition: 0.3s;
+        }
+        .contact-item:hover .contact-icon { background: var(--primary-blue); color: #ffffff; }
+
+        @media (max-width: 991px) {
+            .navbar-collapse { background: #fff; padding: 15px; border-radius: 10px; margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+            .page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= الشريط العلوي ================= -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fa-solid fa-graduation-cap brand-icon"></i> 
+                <div class="brand-text ms-2">
+                    <span class="brand-title">كلية تقنية المعلومات</span>
+                    <span class="brand-subtitle">ELMERGIB UNIVERSITY</span>
+                </div>
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <i class="fa-solid fa-bars text-dark fs-2"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto gap-lg-4 mb-3 mb-lg-0 text-center">
+                    <li class="nav-item"><a class="nav-link" href="/">الرئيسية</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/curriculum">الأقسام المناهج</a></li>
+                    <!-- استدعاء القائمة الجانبية لاتصل بنا -->
+                    <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#contactSidebar">اتصل بنا</a></li>
+                </ul>
+                <div class="d-flex justify-content-center">
+                    <a href="/" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                        <i class="fa-solid fa-arrow-right ms-2"></i> العودة للرئيسية
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ================= ترويسة الصفحة ================= -->
+    <div class="page-header" data-aos="fade-down">
+        <div class="container">
+            <h1 class="page-title">المناهج الدراسية</h1>
+            <p class="page-subtitle">اختر القسم والمادة للوصول إلى الشروحات والملفات المتاحة</p>
+        </div>
+    </div>
+
+
+    <!-- ================= محتوى المنصة (الاختيارات) ================= -->
+    <div class="container pb-5">
+        
+        <div class="selection-card" data-aos="fade-up">
+            <div id="selectors" class="row g-3"></div>
+        </div>
+
+        <!-- منطقة عرض النتائج (فيديو / ملفات) -->
+        <div id="contentArea" class="mt-4" data-aos="fade-up" data-aos-delay="200">
+            <!-- سيتم توليد المحتوى هنا بواسطة الـ JS -->
+        </div>
+
+    </div>
+
+    <!-- نافذة معاينة PDF -->
+    <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 90%;">
+            <div class="modal-content" style="height: 85vh;">
+                <div class="modal-header bg-light border-0 py-2">
+                    <h5 class="modal-title fs-6 fw-bold text-truncate" id="pdfPreviewTitle">معاينة الملف</h5>
+                    <div class="ms-auto d-flex gap-2">
+                        <a href="#" id="pdfDownloadBtn" class="btn btn-sm btn-primary rounded-pill px-3" download>
+                            <i class="fa-solid fa-download me-1"></i> تنزيل
+                        </a>
+                        <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-0 bg-dark">
+                    <iframe id="pdfPreviewFrame" src="" width="100%" height="100%" style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= القائمة الجانبية (اتصل بنا) ================= -->
+    <div class="offcanvas offcanvas-end custom-offcanvas" tabindex="-1" id="contactSidebar" aria-labelledby="contactSidebarLabel">
+        <div class="offcanvas-header pb-0 mt-3 px-4">
+            <h4 class="offcanvas-title fw-bold" id="contactSidebarLabel">
+                <i class="fa-solid fa-headset ms-2 text-warning"></i> تواصل معنا
+            </h4>
+            <button type="button" class="btn-close text-reset m-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body px-4 pt-4">
+            <p class="text-muted mb-4 fs-6">نحن هنا دائماً لمساعدتك. تواصل معنا عبر القنوات التالية:</p>
+            
+            <a href="#" class="contact-item">
+                <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                <div><h6 class="mb-1 fw-bold">واتساب</h6><small class="text-muted">+218 9X XXX XXXX</small></div>
+            </a>
+            <a href="#" class="contact-item">
+                <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+                <div><h6 class="mb-1 fw-bold">البريد الإلكتروني</h6><small class="text-muted">info@darb.edu.ly</small></div>
+            </a>
+            <a href="#" class="contact-item">
+                <div class="contact-icon"><i class="fa-brands fa-facebook-f"></i></div>
+                <div><h6 class="mb-1 fw-bold">فيسبوك</h6><small class="text-muted">آخر الأخبار والتحديثات</small></div>
+            </a>
+            <a href="#" class="contact-item">
+                <div class="contact-icon"><i class="fa-brands fa-telegram"></i></div>
+                <div><h6 class="mb-1 fw-bold">تيليجرام</h6><small class="text-muted">المناهج والملخصات</small></div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap & AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        AOS.init({duration: 800, once: true, offset: 50});
+
+        const structure = {{ structure | tojson | safe }};
+        const oopVideos = [
+            {title: 'مقدمة في البرمجة الشيئية OOP', id: 'aJG-KnmfFxM', url:'https://youtu.be/aJG-KnmfFxM?si=eLgDmAFRIIMbMD-1'},
+            {title: 'التعامل مع Classes و Objects', id: '8eiVaCv26uk', url:'http://youtu.be/8eiVaCv26uk?si=Cnkw82BTh4iNI1oX'},
+            {title: 'مفهوم الوراثة Inheritance', id: '7nTF391uP74', url:'http://youtu.be/7nTF391uP74?si=KGjXqHvmo3DTmzrI'},
+            {title: 'تعدد الأشكال Polymorphism', id: 'SDkRaqmr-Cg', url:'http://youtu.be/SDkRaqmr-Cg?si=hrZmurhQuIUjMMys'}
+        ];
+
+        const visualVideos = [
+            {title: 'مقدمة في البرمجة المرئية #C', id: 'KZuU_EQkfUo', url: 'https://youtu.be/KZuU_EQkfUo?si=HczmQg-WRqhnLLD2'},
+            {title: 'التعامل مع بيئة Visual Studio', id: '-f1G5DwXxcQ', url: 'https://youtu.be/-f1G5DwXxcQ?si=-r4Ueg2XJBMu4FNK'},
+            {title: 'شرح أدوات التحكم TextBox و Label', id: 'In3gnv-7vy0', url: 'https://youtu.be/In3gnv-7vy0?si=3tsPsp9TT7YLaG-k'},
+            {title: 'التعامل مع Button و Events', id: 'w267SMb5Cio', url: 'https://youtu.be/w267SMb5Cio?si=aF9FCh2QHNBDigQ8'},
+            {title: 'شرح CheckBox و RadioButton', id: 'pfTANblumX4', url: 'https://youtu.be/pfTANblumX4?si=OAbuEYu6JiY0Luqb'},
+            {title: 'القوائم المنسدلة ComboBox', id: 'sCV55crjZ6M', url: 'https://youtu.be/sCV55crjZ6M?si=IBCerNrUcpQFVIoO'},
+            {title: 'أداة عرض البيانات DataGridView', id: 'OxJcAu3nbXo', url: 'https://youtu.be/OxJcAu3nbXo?si=RgLMPK82mEWOAU-3'},
+            {title: 'الربط مع قاعدة بيانات SQL Server', id: 'xB-3-qoTc_c', url: 'https://youtu.be/xB-3-qoTc_c?si=p-fL-4JXuzeQ4s0n'},
+            {title: 'عملية الإضافة Insert', id: 'Go7P5Dexkhs', url: 'https://youtu.be/Go7P5Dexkhs?si=GJ7-5FogU_5X7CuL'},
+            {title: 'عملية الحذف Delete', id: 'NS4tYrp5XQ4', url: 'https://youtu.be/NS4tYrp5XQ4?si=uzNNWI1l-_KGgoOT'},
+            {title: 'عملية التعديل Update', id: 'NCtxdqHb8EE', url: 'https://youtu.be/NCtxdqHb8EE?si=qzYAHzHH1nQjmnHM'},
+            {title: 'البحث داخل قاعدة البيانات Search', id: '2akUOdi3WrI', url: 'https://youtu.be/2akUOdi3WrI?si=7R69nnqkXv9NDl2E'},
+            {title: 'دورة كاملة في برمجة المنظومات', id: '4p-XZXfiedc', url: 'https://www.youtube.com/watch?v=4p-XZXfiedc&list=PLTfxx5t6obt_zaTrlzksMkC7npaSGz3uU'},
+            {title: 'تقارير Crystal Reports', id: 'pdsc9SVW-S8', url: 'https://youtu.be/pdsc9SVW-S8?si=9xkLljkr2wVpo0aS'},
+            {title: 'تصميم واجهة المستخدم UI/UX', id: 'pQjAE95w4YY', url: 'https://youtu.be/pQjAE95w4YY?si=AnDXDz6e4Tila4l6'},
+            {title: 'التعامل مع الصور في #C', id: 'vReEhvyaiyM', url: 'https://youtu.be/vReEhvyaiyM?si=jg09ARpjuU2VvUBz'},
+            {title: 'شرح الـ Arrays والمصفوفات', id: 'VELc-KWBulo', url: 'https://youtu.be/VELc-KWBulo?si=F6Y2TXGT52HV0GBG'},
+            {title: 'التعامل مع الملفات Files', id: 'VA5IXH-WOVM', url: 'https://youtu.be/VA5IXH-WOVM?si=kS-FUnlMysnDW-0C'},
+            {title: 'شرح الـ Functions والدوال', id: 'nd3vOxMAiiI', url: 'https://youtu.be/nd3vOxMAiiI?si=vm0513sCYwyTRg8p'},
+            {title: 'أساسيات الـ LINQ', id: 'XBaoxqU3qq0', url: 'https://youtu.be/XBaoxqU3qq0?si=F_5NeSLYaUnb9Ehj'},
+            {title: 'نظام إدارة المبيعات - جزء 1', id: 'eLThM3GHQcY', url: 'https://youtu.be/eLThM3GHQcY?si=MQJfWiTcFG3T_bV0'},
+            {title: 'نظام إدارة المبيعات - جزء 2', id: 'DT7-kSk4md0', url: 'https://youtu.be/DT7-kSk4md0?si=VnNp6MprcneS4aty'},
+            {title: 'نظام إدارة المبيعات - جزء 3', id: 'Y2aBc0uRTPA', url: 'https://youtu.be/Y2aBc0uRTPA?si=usYK7lNt9GYDSh9Y'},
+            {title: 'تجهيز البرنامج للتنبيت Setup', id: 'Bd9f5iP9Cs0', url: 'https://youtu.be/Bd9f5iP9Cs0?si=WUX_A1VQ2cJWT3nz'},
+            {title: 'التعامل مع الـ Timer', id: 'U-SYJQDlmqE', url: 'https://youtu.be/U-SYJQDlmqE?si=nhxR5cXpLWsxx6tm'},
+            {title: 'شرح الـ Try Catch للتعامل مع الأخطاء', id: 'xrc_4wAAEOU', url: 'https://youtu.be/xrc_4wAAEOU?si=ChXPTcQ9Y67KDh6p'},
+            {title: 'تصميم شاشة تسجيل الدخول Login', id: 'BQ7jFrysbQU', url: 'https://youtu.be/BQ7jFrysbQU?si=w4l2fSJiYe8A0b2U'},
+            {title: 'الخاتمة ونصائح برمجية', id: '62Zb2AOl9CY', url: 'https://youtu.be/62Zb2AOl9CY?si=EyZ0mDFzLVA-QbOC'}
+        ];
+
+        const algorithmVideos = [
+            {title: 'مقدمة في تحليل الخوارزميات', id: 'wXm2V6TKRwU', url: 'https://youtu.be/wXm2V6TKRwU?si=Oj1JK9C89acl2qYg'},
+            {title: 'شرح مفهوم الـ Big O Notation', id: 'aLBFJG-CsW0', url: 'https://youtu.be/aLBFJG-CsW0?si=pPhC_UXB039gQxbn'},
+            {title: 'خوارزميات الترتيب Sorting - جزء 1', id: 'iLNXdmuza3A', url: 'https://youtu.be/iLNXdmuza3A?si=MuJwTu75YcXrvge4'},
+            {title: 'خوارزميات البحث Search Algorithms', id: 'qJsmUw3-QRA', url: 'https://youtu.be/qJsmUw3-QRA?si=e4g6whrr8qpS-oXQ'},
+            {title: 'تحليل أداء الخوارزميات المعقدة', id: 'NK-Z7syJzP4', url: 'https://youtu.be/NK-Z7syJzP4?si=iho3mIgZLqNwsKew'}
+        ];
+
+        function populateSelect(selectElem, options) {
+            selectElem.innerHTML = '';
+            const placeholder = document.createElement('option');
+            placeholder.value = '';
+            placeholder.textContent = '--- اختر ---';
+            placeholder.disabled = true;
+            placeholder.selected = true;
+            selectElem.appendChild(placeholder);
+            options.forEach(opt => {
+                const o = document.createElement('option');
+                o.value = opt;
+                o.textContent = opt;
+                selectElem.appendChild(o);
+            });
+        }
+
+        function renderFilesList(files) {
+            const contentArea = document.getElementById('contentArea');
+            if (!files || files.length === 0) {
+                contentArea.innerHTML += `<div class="alert alert-info border-0 shadow-sm rounded-4 text-center fw-bold py-4">
+                                            <i class="fa-solid fa-folder-open fs-1 d-block mb-2 text-primary"></i>
+                                            لا توجد ملفات متاحة حالياً في هذا القسم.
+                                         </div>`;
+                return;
+            }
+            const list = document.createElement('ul');
+            list.className = 'custom-file-list position-relative';
+            files.forEach(f => {
+                const li = document.createElement('li');
+                li.className = 'file-item position-relative';
+                li.innerHTML = `
+                    <div class="file-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                    <div class="flex-grow-1">
+                        <span class="file-name fw-bold text-dark">${f.name}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-light btn-sm text-primary rounded-circle border preview-btn" title="معاينة الملف">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <a href="${f.url}" download class="btn btn-light btn-sm text-success rounded-circle border download-btn" title="تنزيل">
+                            <i class="fa-solid fa-download"></i>
+                        </a>
+                    </div>
+                `;
+                
+                // إضافة وظيفة المعاينة للزر
+                const previewBtn = li.querySelector('.preview-btn');
+                previewBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openPdfPreview(f.name, f.url);
+                });
+
+                list.appendChild(li);
+            });
+            document.getElementById('contentArea').appendChild(list);
+        }
+
+        function openPdfPreview(name, url) {
+            const modalElement = document.getElementById('pdfPreviewModal');
+            const titleElement = document.getElementById('pdfPreviewTitle');
+            const iframeElement = document.getElementById('pdfPreviewFrame');
+            const downloadBtn = document.getElementById('pdfDownloadBtn');
+            
+            titleElement.textContent = name;
+            iframeElement.src = url;
+            downloadBtn.href = url;
+            
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            
+            // تنظيف الـ iframe عند إغلاق النافذة لتوفير الذاكرة
+            modalElement.addEventListener('hidden.bs.modal', () => {
+                iframeElement.src = '';
+            }, { once: true });
+        }
+
+        // تم إضافة شرط هنا لكي لا يعرض الفيديوهات إلا إذا كان اسم المادة يحتوي على "شيئية" أو "مرئية" أو "خوارزميات"
+        function renderVideoCards(subjectName) {
+            let targetVideos = [];
+            if (subjectName && subjectName.includes('شيئية')) {
+                targetVideos = oopVideos;
+            } else if (subjectName && subjectName.includes('مرئية')) {
+                targetVideos = visualVideos;
+            } else if (subjectName && subjectName.includes('خوارزميات')) {
+                targetVideos = algorithmVideos;
+            } else {
+                return;
+            }
+
+            const contentArea = document.getElementById('contentArea');
+            const grid = document.createElement('div');
+            grid.className = 'card-grid mb-4';
+            targetVideos.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'video-card';
+                card.innerHTML = `
+                    <div class="video-thumbnail-container">
+                        <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" alt="${v.title}">
+                        <i class="fa-solid fa-circle-play play-overlay"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${v.title}</h5>
+                    </div>`;
+                card.addEventListener('click', () => { window.open(v.url, '_blank'); });
+                grid.appendChild(card);
+            });
+            contentArea.appendChild(grid);
+        }
+
+        function createCustomDropdown(options, onSelect, placeholder = '--- اختر ---') {
+            const container = document.createElement('div');
+            container.className = 'custom-dropdown-container';
+            
+            container.innerHTML = `
+                <div class="dropdown-trigger">
+                    <span class="selected-text">${placeholder}</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-menu-custom">
+                    <div class="dropdown-search-wrapper">
+                        <input type="text" class="dropdown-search" placeholder="بحث...">
+                    </div>
+                    <div class="dropdown-options-list">
+                        ${options.map(opt => `<div class="dropdown-option" data-value="${opt}">${opt}</div>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            const trigger = container.querySelector('.dropdown-trigger');
+            const menu = container.querySelector('.dropdown-menu-custom');
+            const searchInput = container.querySelector('.dropdown-search');
+            const optionElements = container.querySelectorAll('.dropdown-option');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = trigger.classList.contains('active');
+                document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.dropdown-menu-custom').forEach(m => m.style.display = 'none');
+                
+                if (!isActive) {
+                    trigger.classList.add('active');
+                    menu.style.display = 'block';
+                    searchInput.focus();
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                optionElements.forEach(el => {
+                    const text = el.textContent.toLowerCase();
+                    el.style.display = text.includes(term) ? 'block' : 'none';
+                });
+            });
+
+            optionElements.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    const val = el.getAttribute('data-value');
+                    trigger.querySelector('.selected-text').textContent = val;
+                    
+                    // تحديث الحالة المختارة بصرياً
+                    optionElements.forEach(opt => opt.classList.remove('selected'));
+                    el.classList.add('selected');
+                    
+                    trigger.classList.remove('active');
+                    menu.style.display = 'none';
+                    onSelect(val);
+                });
+            });
+
+            document.addEventListener('click', () => {
+                trigger.classList.remove('active');
+                menu.style.display = 'none';
+            });
+
+            return container;
+        }
+
+        function buildSelector(levelData, levelIndex, parentSelectionName = '') {
+            const selectorsContainer = document.getElementById('selectors');
+            
+            let options = Object.keys(levelData).filter(k => k !== '__files__');
+            
+            if (levelIndex === 0) {
+                options = options.filter(k => k !== 'الخيرات');
+            }
+            
+            const hasSpecialVideos = parentSelectionName.includes('شيئية') || parentSelectionName.includes('مرئية') || parentSelectionName.includes('خوارزميات');
+            if (levelIndex === 2 && hasSpecialVideos && !options.includes('شرح المادة')) {
+                options = ['شرح المادة', ...options];
+            }
+            
+            if (options.length === 0) {
+                if (levelData['__files__']) {
+                    renderVideoCards(parentSelectionName);
+                    renderFilesList(levelData['__files__']);
+                }
+                return;
+            }
+
+            const col = document.createElement('div');
+            col.className = 'col-12 col-md-6 col-lg-3';
+            col.dataset.level = String(levelIndex);
+            
+            const titles = ['اختر القسم', 'اختر المادة', 'اختر المحتوى', 'اختر الفصل الدراسي'];
+            const stepTitle = titles[levelIndex] || 'اختر';
+            
+            const label = document.createElement('label');
+            label.className = 'step-title d-block mb-2';
+            label.innerHTML = `<span class="step-number">${levelIndex + 1}</span> ${stepTitle}`;
+            
+            col.appendChild(label);
+
+            const dropdown = createCustomDropdown(options, (chosen) => {
+                Array.from(selectorsContainer.children).forEach(child => {
+                    const childLevel = Number(child.dataset.level ?? -1);
+                    if (!Number.isNaN(childLevel) && childLevel > levelIndex) {
+                        child.remove();
+                    }
+                });
+
+                const hasSpecialVideosLocal = parentSelectionName.includes('شيئية') || parentSelectionName.includes('مرئية') || parentSelectionName.includes('خوارزميات');
+                if (levelIndex === 2 && hasSpecialVideosLocal && chosen === 'شرح المادة') {
+                    document.getElementById('contentArea').innerHTML = '';
+                    renderVideoCards(parentSelectionName);
+                    return;
+                }
+                
+                const nextData = levelData[chosen];
+                document.getElementById('contentArea').innerHTML = '';
+                
+                if (!nextData) return;
+
+                const hasFiles = Array.isArray(nextData['__files__']) && nextData['__files__'].length > 0;
+                const hasChildren = Object.keys(nextData).some(k => k !== '__files__');
+
+                if (hasFiles) {
+                    renderVideoCards(chosen); 
+                    renderFilesList(nextData['__files__']);
+                }
+
+                if (hasChildren) {
+                    buildSelector(nextData, levelIndex + 1, chosen);
+                }
+            });
+
+            col.appendChild(dropdown);
+            selectorsContainer.appendChild(col);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // clear any previous results
+            document.getElementById('selectors').innerHTML = '';
+            document.getElementById('contentArea').innerHTML = '';
+            buildSelector(structure, 0);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة درب - كلية تقنية المعلومات</title>
+    
+    <!-- Bootstrap 5 RTL CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #2795f3; 
+            --dark-blue: #1620c2; 
+            --yellow-accent: #f5a800; 
+            --text-dark: #0f172a;
+            --light-bg: #f8fafc; /* لون خلفية رمادي فاتح جداً للأقسام */
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* لمنع السكرول الأفقي الخاطئ */
+        }
+
+        /* ------------------------------------------ */
+        /* القسم الرئيسي العلوي (Hero) */
+        /* ------------------------------------------ */
+        .main-wrapper {
+            background-color: var(--primary-blue);
+            min-height: 95vh;
+            border-bottom-left-radius: 60px;
+            border-bottom-right-radius: 60px;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 50px;
+            z-index: 2; /* ليبقى فوق الأقسام التي تليه */
+        }
+
+        .bg-image-layer {
+            position: absolute;
+            top: -15%; 
+            left: 0;
+            width: 100%;
+            height: 130%; 
+            background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15; 
+            z-index: 0;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .navbar {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            position: relative;
+            z-index: 1; 
+        }
+        
+        .navbar-brand { display: flex; align-items: center; gap: 10px; }
+        .brand-icon { color: var(--text-dark); font-size: 28px; }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+        .brand-title { color: var(--text-dark); font-size: 15px; font-weight: 800; }
+        .brand-subtitle { color: var(--yellow-accent); font-size: 11px; font-weight: 800; letter-spacing: 0.5px; }
+
+        .nav-link { color: var(--text-dark) !important; font-weight: 800; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover { color: #fff !important; }
+
+        .btn-custom-dark {
+            background-color: var(--dark-blue); color: #fff; font-weight: 700;
+            padding: 8px 30px; border-radius: 50px; border: none; transition: 0.3s;
+        }
+        .btn-custom-dark:hover { background-color: #0d148c; color: #fff; transform: scale(1.05); }
+
+        .hero-section { padding-top: 60px; position: relative; z-index: 1; }
+        .title-platform { font-size: 3.5rem; font-weight: 300; color: #ffffff; }
+        
+        .badge-darb {
+            background-color: var(--yellow-accent); color: #ffffff; padding: 0px 35px;
+            font-size: 3.5rem; font-weight: 600; border-radius: 0px 40px 0px 40px; 
+            margin-right: 15px; display: inline-block;
+        }
+
+        .subtitle-light { color: #ffffff; font-size: 1.4rem; font-weight: 400; margin-top: 15px; margin-bottom: 20px; opacity: 0.9; }
+        .main-headline { color: #ffffff; font-size: 2rem; font-weight: 800; line-height: 1.5; margin-bottom: 25px; }
+        .highlight-yellow { color: var(--yellow-accent); font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; }
+        .sub-headline-bold { color: #ffffff; font-size: 1.8rem; font-weight: 800; margin-bottom: 40px; }
+
+        .btn-curriculum {
+            background-color: var(--dark-blue); color: #ffffff; font-size: 1.3rem; font-weight: 800;
+            padding: 12px 40px; border-radius: 50px; display: inline-flex; align-items: center;
+            gap: 15px; text-decoration: none; transition: 0.3s; box-shadow: 0 10px 20px rgba(22, 32, 194, 0.2);
+        }
+        .btn-curriculum:hover { background-color: #0d148c; color: #fff; transform: translateY(-3px); }
+
+        /* رسومات CSS (Illustration) */
+        .illustration-box { position: relative; width: 100%; height: 450px; margin-top: 20px; }
+        .desk-line { position: absolute; bottom: 30px; left: 5%; width: 90%; height: 2px; background-color: rgba(0, 0, 0, 0.3); border-radius: 5px; }
+        .student { position: absolute; bottom: 120px; left: 45%; transform: translateX(-50%); z-index: 1; }
+        .student-head { width: 60px; height: 70px; background-color: #ffbfae; border-radius: 30px; position: relative; margin: 0 auto; }
+        .student-hair { position: absolute; top: -10px; left: -5px; width: 70px; height: 45px; background-color: #1a1a24; border-radius: 40px 40px 15px 15px; }
+        .student-body { width: 130px; height: 100px; background-color: #2f2e41; border-radius: 40px 40px 0 0; margin-top: -5px; position: relative; overflow: hidden; }
+        .student-shirt { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 100%; background-color: #6c63ff; }
+        .laptop { position: absolute; bottom: 32px; left: 45%; transform: translateX(-50%); width: 200px; z-index: 2; }
+        .laptop-screen { width: 100%; height: 120px; background-color: #3f3d56; border-radius: 10px 10px 0 0; position: relative; box-shadow: inset 0 0 0 4px #2b2b36; }
+        .laptop-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 25px; height: 25px; background-color: var(--primary-blue); border-radius: 50%; }
+        .laptop-base { width: 220px; height: 12px; background-color: #2b2b36; border-radius: 0 0 15px 15px; margin-left: -10px; }
+        .coffee-cup { position: absolute; bottom: 32px; left: 20%; width: 30px; height: 40px; background-color: #f8f9fa; border-radius: 0 0 8px 8px; z-index: 2; }
+        .coffee-lid { position: absolute; top: -6px; left: -2px; width: 34px; height: 8px; background-color: #e2e8f0; border-radius: 4px; }
+        .coffee-smoke { position: absolute; top: -20px; left: 10px; width: 2px; height: 15px; background-color: rgba(255, 255, 255, 0.6); border-radius: 50%; animation: smokeAnim 2s infinite; }
+        @keyframes smokeAnim { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-15px) scale(1.5); opacity: 0; } }
+        .floating-icons-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .f-icon { position: absolute; display: flex; align-items: center; justify-content: center; background-color: #fff; border-radius: 50%; box-shadow: 0 8px 15px rgba(0,0,0,0.1); animation: floatAnim 4s ease-in-out infinite; }
+        .icon-chart { top: 40px; left: 60%; width: 50px; height: 50px; font-size: 26px; color: #f5a800; }
+        .icon-python { top: 90px; left: 45%; width: 65px; height: 65px; font-size: 40px; background: transparent; box-shadow: none; color: #ffd43b; text-shadow: -2px 0 #3776ab, 0 2px #3776ab, 2px 0 #3776ab, 0 -2px #3776ab; animation-delay: 0.5s; }
+        .icon-network { top: 60px; left: 25%; width: 50px; height: 50px; font-size: 24px; color: #e53935; background: transparent; box-shadow: none; animation-delay: 1s; }
+        .icon-brain { top: 150px; left: 70%; width: 45px; height: 45px; font-size: 24px; color: #e91e63; background: transparent; box-shadow: none; animation-delay: 1.5s; }
+        .icon-monitor { top: 200px; left: 30%; width: 40px; height: 40px; font-size: 20px; color: #2196f3; border-radius: 8px; animation-delay: 2s; }
+        @keyframes floatAnim { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        .svg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        /* ------------------------------------------ */
+        /* قسم الأقسام (Departments Section) */
+        /* ------------------------------------------ */
+        .section-title {
+            color: var(--dark-blue);
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: 50%;
+            height: 4px;
+            background-color: var(--yellow-accent);
+            border-radius: 2px;
+        }
+
+        /* حاوية السلايدر الأفقي */
+        .slider-container {
+            width: 100%;
+            overflow: hidden; /* إخفاء ما يخرج عن الإطار */
+            padding: 20px 0 40px 0;
+        }
+        
+        .slider-track {
+            display: flex;
+            gap: 24px;
+            transition: transform 0.5s ease-in-out;
+            /* يتم تحريكه بواسطة الجافاسكربت */
+        }
+
+        /* تصميم المربع الخاص بكل قسم */
+        .dept-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+            flex: 0 0 calc(33.333% - 16px); /* يأخذ ثلث الشاشة دائماً ليعرض 3 مربعات */
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        /* تأثير التنطط / الارتفاع عند تمرير الماوس */
+        .dept-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(39, 149, 243, 0.15);
+            border-color: rgba(39, 149, 243, 0.3);
+        }
+
+        .dept-icon {
+            width: 70px;
+            height: 70px;
+            background-color: var(--light-bg);
+            color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 20px auto;
+            transition: 0.3s;
+        }
+        .dept-card:hover .dept-icon {
+            background-color: var(--primary-blue);
+            color: #ffffff;
+        }
+
+        .dept-title {
+            color: var(--text-dark);
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .dept-desc {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 500;
+            /* حد سطرين فقط */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        /* نقاط التحكم (النقاط التي في الأسفل) */
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: #cbd5e1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .dot.active {
+            background-color: var(--yellow-accent);
+            width: 30px;
+            border-radius: 10px;
+        }
+
+        /* ------------------------------------------ */
+        /* قسم الروابط المهمة */
+        /* ------------------------------------------ */
+        .important-links-section {
+            background-color: var(--light-bg);
+            padding: 80px 0;
+        }
+
+        .link-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 1px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .link-card:hover {
+            border-color: var(--primary-blue);
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+        }
+
+        /* مكان الدائرة على اليسار */
+        .link-circle-placeholder {
+            width: 65px;
+            height: 65px;
+            background-color: #e2e8f0;
+            border-radius: 50%;
+            flex-shrink: 0;
+            /* لدفعها لليسار نستخدم margin-right: auto (بسبب الـ RTL) */
+            margin-right: auto; 
+            border: 2px dashed #cbd5e1; /* لتبدو كمكان مخصص لصورة */
+        }
+
+        .link-content {
+            flex-grow: 1;
+        }
+
+        .link-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .link-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* ------------------------------------------ */
+        /* قسم اتصل بنا (الفوتر الاحترافي) */
+        /* ------------------------------------------ */
+        .footer-section {
+            background-color: var(--dark-blue);
+            color: #ffffff;
+            padding: 60px 0 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* شكل جمالي في الفوتر */
+        .footer-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .social-link:hover {
+            background-color: var(--yellow-accent);
+            color: #ffffff;
+            transform: translateY(-5px);
+        }
+
+        .developer-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 30px;
+        }
+
+        /* التجاوب مع الشاشات الصغيرة */
+        @media (max-width: 991px) {
+            .hero-section { text-align: center; }
+            .hero-section .d-flex { justify-content: center !important; }
+            .illustration-box { transform: scale(0.8); margin-top: -20px; }
+            .navbar-collapse { background: #fff; padding: 15px; border-radius: 10px; margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+            .nav-link { color: var(--primary-blue) !important; }
+            
+            /* تعديل الأقسام في الموبايل لتعرض واحداً فقط */
+            .dept-card { flex: 0 0 calc(100% - 0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= القسم الرئيسي ================= -->
+    <div class="main-wrapper">
+        <div class="bg-image-layer" id="parallax-bg"></div>
+
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fa-solid fa-graduation-cap brand-icon"></i> 
+                    <div class="brand-text ms-2">
+                        <span class="brand-title">كلية تقنية المعلومات</span>
+                        <span class="brand-subtitle">ELMERGIB UNIVERSITY</span>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <i class="fa-solid fa-bars text-white fs-2"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav mx-auto gap-lg-4 mb-3 mb-lg-0 text-center">
+                        <li class="nav-item"><a class="nav-link active" href="#">الرئيسية</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#departments">الأقسام</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#important-links">روابط مهمة</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact-us">اتصل بنا</a></li>
+                    </ul>
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="btn btn-custom-dark">ابدأ رحلتك الان</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container hero-section">
+            <div class="row align-items-center">
+                
+                <div class="col-lg-6 order-2 order-lg-1" data-aos="fade-left">
+                    <div class="d-flex align-items-center mb-1">
+                        <span class="title-platform">منصة</span>
+                        <span class="badge-darb">درب</span>
+                    </div>
+                    <p class="subtitle-light">لا حدود للتعلم</p>
+                    <h2 class="main-headline">خدمة تعليمية تقدم كل مايحتاجه طالب كلية تقنية المعلومات</h2>
+                    <h1 class="highlight-yellow">المناهج الدراسية</h1>
+                    <h3 class="sub-headline-bold">بشكل مبسط وسهل</h3>
+                    <a href="#departments" class="btn btn-curriculum">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                        المنهج الدراسي
+                    </a>
+                </div>
+
+                <div class="col-lg-6 order-1 order-lg-2 mb-5 mb-lg-0" data-aos="zoom-in">
+                    <div class="illustration-box">
+                        <svg class="svg-lines">
+                            <path d="M 250 250 Q 180 180 200 100" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" />
+                            <path d="M 250 250 Q 300 150 350 180" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" />
+                            <path d="M 250 250 Q 120 180 150 220" stroke="rgba(255,255,255,0.4)" stroke-width="1" fill="none" />
+                        </svg>
+                        <div class="floating-icons-container">
+                            <div class="f-icon icon-chart"><i class="fa-solid fa-chart-pie"></i></div>
+                            <div class="f-icon icon-python"><i class="fa-brands fa-python"></i></div>
+                            <div class="f-icon icon-network"><i class="fa-solid fa-network-wired text-white"></i></div>
+                            <div class="f-icon icon-brain"><i class="fa-solid fa-head-side-virus text-white"></i></div>
+                            <div class="f-icon icon-monitor"><i class="fa-solid fa-desktop"></i></div>
+                        </div>
+                        <div class="student">
+                            <div class="student-head"><div class="student-hair"></div></div>
+                            <div class="student-body"><div class="student-shirt"></div></div>
+                        </div>
+                        <div class="laptop">
+                            <div class="laptop-screen"><div class="laptop-logo"></div></div>
+                            <div class="laptop-base"></div>
+                        </div>
+                        <div class="coffee-cup">
+                            <div class="coffee-lid"></div><div class="coffee-smoke"></div>
+                        </div>
+                        <div class="desk-line"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= قسم أقسام الكلية ================= -->
+    <section id="departments" class="py-5 bg-white">
+        <div class="container py-4">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="section-title">أقسام الكلية</h2>
+                <p class="text-muted fs-5 mt-2">اختر التخصص الذي يناسب طموحاتك وشغفك التقني</p>
+            </div>
+
+            <!-- حاوية السلايدر -->
+            <div class="slider-container" data-aos="fade-up" data-aos-delay="200">
+                <div class="slider-track" id="sliderTrack">
+                    
+                    <!-- 1. هندسة البرمجيات -->
+                    <div class="dept-card" id="card-0">
+                        <div class="dept-icon">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h3 class="dept-title">هندسة البرمجيات</h3>
+                        <p class="dept-desc">
+                            دراسة متعمقة في تصميم وتطوير الأنظمة والبرمجيات الذكية باستخدام أحدث اللغات والتقنيات.
+                        </p>
+                    </div>
+
+                    <!-- 2. القسم العام -->
+                    <div class="dept-card" id="card-1">
+                        <div class="dept-icon">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3 class="dept-title">القسم العام</h3>
+                        <p class="dept-desc">
+                            الأساس المتين الذي يمهد لك الطريق لفهم علوم الحاسوب والرياضيات البرمجية قبل التخصص.
+                        </p>
+                    </div>
+
+                    <!-- 3. قسم الشبكات -->
+                    <div class="dept-card" id="card-2">
+                        <div class="dept-icon">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h3 class="dept-title">قسم الشبكات</h3>
+                        <p class="dept-desc">
+                            تعلم كيفية ربط العالم ببعضه وإدارة وتأمين الخوادم والبيانات والاتصالات اللاسلكية بمهارة.
+                        </p>
+                    </div>
+
+                    <!-- 4. تقنية الإنترنت -->
+                    <div class="dept-card" id="card-3">
+                        <div class="dept-icon">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <h3 class="dept-title">تقنية الإنترنت</h3>
+                        <p class="dept-desc">
+                            تخصص يركز على برمجة الويب المتقدمة، الحوسبة السحابية، وتطوير مواقع احترافية ومتفاعلة.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- نقاط التحكم في السلايدر -->
+            <div class="slider-dots" data-aos="fade-up" data-aos-delay="300">
+                <span class="dot active" onclick="moveSlider(0)"></span>
+                <span class="dot" onclick="moveSlider(1)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= قسم الروابط المهمة ================= -->
+    <section id="important-links" class="important-links-section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="section-title">الروابط المهمة</h2>
+                <p class="text-muted fs-5 mt-2">أبرز المنصات والصفحات التي يحتاجها الطالب</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- الرابط 1 -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="link-card">
+                        <div class="link-content">
+                            <h4 class="link-title">عنوان الرابط الأول</h4>
+                            <p class="link-desc">هنا يتم كتابة تفاصيل بسيطة عن الرابط وإلى أين يؤدي هذا الموقع.</p>
+                        </div>
+                        <div class="link-circle-placeholder"></div>
+                    </div>
+                </div>
+
+                <!-- الرابط 2 -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="link-card">
+                        <div class="link-content">
+                            <h4 class="link-title">عنوان الرابط الثاني</h4>
+                            <p class="link-desc">هنا يتم كتابة تفاصيل بسيطة عن الرابط وإلى أين يؤدي هذا الموقع.</p>
+                        </div>
+                        <div class="link-circle-placeholder"></div>
+                    </div>
+                </div>
+
+                <!-- الرابط 3 -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="link-card">
+                        <div class="link-content">
+                            <h4 class="link-title">عنوان الرابط الثالث</h4>
+                            <p class="link-desc">هنا يتم كتابة تفاصيل بسيطة عن الرابط وإلى أين يؤدي هذا الموقع.</p>
+                        </div>
+                        <div class="link-circle-placeholder"></div>
+                    </div>
+                </div>
+
+                <!-- الرابط 4 -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="link-card">
+                        <div class="link-content">
+                            <h4 class="link-title">عنوان الرابط الرابع</h4>
+                            <p class="link-desc">هنا يتم كتابة تفاصيل بسيطة عن الرابط وإلى أين يؤدي هذا الموقع.</p>
+                        </div>
+                        <div class="link-circle-placeholder"></div>
+                    </div>
+                </div>
+
+                <!-- الرابط 5 -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="link-card">
+                        <div class="link-content">
+                            <h4 class="link-title">عنوان الرابط الخامس</h4>
+                            <p class="link-desc">هنا يتم كتابة تفاصيل بسيطة عن الرابط وإلى أين يؤدي هذا الموقع.</p>
+                        </div>
+                        <div class="link-circle-placeholder"></div>
+                    </div>
+                </div>
+
+                <!-- الرابط 6 -->
+                <div class="col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="link-card">
+                        <div class="link-content">
+                            <h4 class="link-title">عنوان الرابط السادس</h4>
+                            <p class="link-desc">هنا يتم كتابة تفاصيل بسيطة عن الرابط وإلى أين يؤدي هذا الموقع.</p>
+                        </div>
+                        <div class="link-circle-placeholder"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= قسم اتصل بنا (الفوتر) ================= -->
+    <footer id="contact-us" class="footer-section">
+        <div class="container text-center" data-aos="zoom-in">
+            
+            <h3 class="mb-4 fw-bold">ابقَ على تواصل معنا</h3>
+            <p class="text-white-50 mb-4 fs-5">تابعنا على وسائل التواصل الاجتماعي لمعرفة كل جديد</p>
+            
+            <!-- أزرار التواصل الاجتماعي للمطور/الموقع -->
+            <div class="d-flex justify-content-center flex-wrap mb-4">
+                <a href="#" class="social-link" title="فيسبوك"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="social-link" title="تويتر"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="social-link" title="لينكد إن"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="#" class="social-link" title="جيت هب"><i class="fa-brands fa-github"></i></a>
+            </div>
+
+            <!-- رابط موقع الكلية الأساسي -->
+            <a href="#" class="btn btn-outline-light rounded-pill px-4 py-2 mt-2 fw-bold">
+                <i class="fa-solid fa-globe ms-2"></i> زيارة موقع الكلية الرسمي
+            </a>
+
+            <div class="mt-5">
+                <div class="developer-badge">
+                    <i class="fa-solid fa-code text-warning"></i> تم التطوير بكل حب لطلاب تقنية المعلومات
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // تفعيل مكتبة الحركات عند النزول (AOS)
+        AOS.init({
+            duration: 800, // سرعة الحركة
+            once: true, // الحركة تحدث مرة واحدة فقط عند النزول
+            offset: 100 // يبدأ التفعيل قبل الوصول للعنصر بـ 100 بكسل
+        });
+
+        // سكريبت تأثير التمرير (Parallax) للصورة الخلفية في القسم العلوي
+        window.addEventListener('scroll', function() {
+            const bgLayer = document.getElementById('parallax-bg');
+            const scrollValue = window.scrollY;
+            const moveY = scrollValue * 0.4;
+            bgLayer.style.transform = `translateY(${moveY}px)`;
+        });
+
+        // سكريبت تحريك سلايدر الأقسام (عرض 3 من أصل 4)
+        function moveSlider(dotIndex) {
+            const track = document.getElementById('sliderTrack');
+            const dots = document.querySelectorAll('.dot');
+            const cardWidth = document.querySelector('.dept-card').offsetWidth;
+            const gap = 24; // المسافة بين المربعات
+            
+            // في حالة الشاشات الكبيرة (يعرض 3)، نحرك مربع واحد فقط لليمين ليظهر الرابع
+            // بما أن الموقع RTL (من اليمين لليسار)، القيمة تكون موجبة
+            let moveAmount = 0;
+            if(window.innerWidth > 991) {
+                moveAmount = dotIndex === 1 ? (cardWidth + gap) : 0;
+            } else {
+                // في الموبايل يتحرك كرت كامل لكل نقطة
+                moveAmount = dotIndex * (cardWidth + gap);
+            }
+
+            track.style.transform = `translateX(${moveAmount}px)`;
+
+            // تحديث شكل النقاط (تغيير اللون للفعال)
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[dotIndex].classList.add('active');
+        }
+    </script>
+</body>
+</html>
